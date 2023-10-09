@@ -1,0 +1,67 @@
+# This workflow will build a golang project
+# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-go
+
+name: Go
+
+on:
+  push:
+    branches: [ "master" ]
+  pull_request:
+    branches: [ "master" ]
+
+jobs:
+
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Set up Go
+      uses: actions/setup-go@v4
+      with:
+        go-version: '1.20'
+
+    - name: Build
+      run: go build -v ./...
+
+    - name: Test
+      run: go test -v ./...
+      
+- name: Satellite file upload
+  # You may pin to the exact commit or the version.
+  # uses: IBM/satellite-config-upload-action@fa11109a47c82d0adf3f02c3a3ba59d4a4db7054
+  uses: IBM/satellite-config-upload-action@v1.0.1
+  with:
+    # IBM Cloud API key
+    apikey: 
+    # Satellite Config channelUuid
+    channelUuid: 
+    # File to upload
+    filename: 
+    # Name of the new version
+    versionName: 
+    # IBM Cloud Satellite API endpoint
+    satelliteHost: # optional, default is https://config.satellite.cloud.ibm.com/graphql
+    # IBM Cloud IAM endpoint
+    tokenHost: # optional, default is https://iam.cloud.ibm.com/identity/token
+
+    - name: Install KittyCAD CLI
+  # You may pin to the exact commit or the version.
+  # uses: KittyCAD/action-install-cli@e26335459a56f191468e88c61d66f3f0b7d5dd79
+  uses: KittyCAD/action-install-cli@v0.1.1
+
+  - name: Quality Clouds Build Check for Salesforce
+  # You may pin to the exact commit or the version.
+  # uses: qualityclouds/action-full-scan@4bc13bbfa27d8eaa0bc4978ac161d148a6f70ac4
+  uses: qualityclouds/action-full-scan@1.0.1
+  with:
+    # You need to provide a valid API key to connect the Quality Clouds ruleset against which your code will be checked
+    token: 
+    # Use cloud mode to runh a Feature branch scan
+    mode: # optional
+    # The instance Id. Required when cloud mode is enabled.
+    url_id: # optional
+    # Use cloud mode to runh a Feature branch scan
+    api_url: # optional
+    # Customize runner version
+    version: # optional
